@@ -12,6 +12,7 @@ npm i
 fill in the .env file
 
 ```
+cp .env.conf
 nano .env
 ```
 
