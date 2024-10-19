@@ -26,6 +26,7 @@ VALOPER=storyvaloper1x9c7xr8x4du2e926cgztthaq8cydnvcvvypesa
 RPC=<your_rpc>
 STORY_API=https://api.testnet.storyscan.app
 RENDER=5
+SERVICE_NAME=story-testnet.service
 ```
 
 Run
