@@ -1,0 +1,34 @@
+{
+  "name": "story_bot",
+  "version": "1.0.0",
+  "description": "story_monitoring_bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "prod": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tarabukinivan/storybot"
+  },
+  "keywords": [
+    "crypto",
+    "bot",
+    "story"
+  ],
+  "author": "tarabukinivan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tarabukinivan/storybot/issues"
+  },
+  "homepage": "https://github.com/tarabukinivan/storybot",
+  "dependencies": {
+    "app-root-path": "^3.1.0",
+    "dotenv": "^16.0.3",
+    "node-cron": "^3.0.2",
+    "node-telegram-bot-api": "^0.60.0",
+    "nodemon": "^3.1.7",
+    "readline-async": "^0.1.0",
+    "shelljs": "^0.8.5"
+  }
+}
