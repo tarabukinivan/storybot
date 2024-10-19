@@ -4,9 +4,9 @@ const bot = new TelegramApi(process.env.BOT_TOKEN, {polling: true})
 const chatId = process.env.CHATID
 const binf = process.env.BIN
 const valoper = process.env.VALOPER
-//storyvaloper1ljcml8a6ee5pjymaljvey4ghtd72y0za2jk4ts
 const wallet = process.env.WALLET
 const render = process.env.RENDER
+const servicename = process.env.SERVICE_NAME
 const apist = process.env.STORY_API
 const cuttext = require('./requests/cuttext.js')
 const rpc = process.env.RPC
@@ -20,6 +20,7 @@ bot.setMyCommands([
     {command: '/status', description: 'node status'},
     {command: '/peers', description: 'number of peers'},
     {command: '/infoval', description: 'Validator Info'},
+    {command: '/logs', description: 'Last logs'},
     {command: '/nodeheight', description: 'Node height'},
     {command: '/mute', description: 'disabled monitoring'},
     {command: '/unmute', description: 'enable monitoring'},
@@ -48,6 +49,24 @@ async function testrpc(){
     } catch (e) {  
         console.log('node not configured,\n\n error:  ' + e);
         process.exit(1)
+    }
+}
+
+async function valinfo(){
+    try {
+        const commd = `curl -s ${apist}/validators/${valoper}`;
+        var apitmp = await shellexe(commd);
+        if(!apitmp){             
+             return false
+        }
+        apitmp = jsonparse(apitmp)
+        if(apitmp){
+            return apitmp
+        }else{
+            return false
+        }
+    } catch (e) {  
+        console.log('node not configured,\n\n error:  ' + e);
     }
 }
 
@@ -293,6 +312,18 @@ const start = () => {
             }
             
         }
+        if(text === '/infoval'){      
+            val = await valinfo();
+            console.log(val.consensus_pubkey)
+            return bot.sendMessage(chatId, `valoper: ${val.operator_address}\nconsensus_pubkey: type=\"${val.consensus_pubkey.type}\"\nvalue=\"${val.consensus_pubkey.value}\"\nstatus: ${val.status}\ntokens: ${val.tokens}\ncommission:\nrate: ${val.commission.commission_rates.rate}\nmax_rate: ${val.commission.commission_rates.max_rate}\nmax_change_rate: ${val.commission.commission_rates.max_change_rate}\nhexAddress:${val.hexAddress}\naccountAddress: ${val.accountAddress}\ntombstoned: ${val.tombstoned}\neth: ${val.eth}`);
+        }
+        
+        if(text === '/logs'){
+            let tmp = shellexe(`journalctl -u ${servicename} -n 30 -o cat | sed -r "s/\x1B\\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g"`)
+            return bot.sendMessage(chatId, 'Last Logs:\n\n' + cuttext(tmp,true));
+        }
+        
+        return bot.sendMessage(chatId, `Unknown command`)
         
     });
 }
